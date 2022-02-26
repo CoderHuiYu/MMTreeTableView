@@ -6,37 +6,38 @@
 //
 
 import UIKit
+
 public protocol MMTreeTableViewDelegate: AnyObject{
 
-    func customerViewDataArrayCount() -> Int
-    func customViewConfigure(numberOfItems item: Int, cycleView view: MMTreeTableView) -> UIView
-    func collectionView(_ cycleView: MMTreeTableView, didSelectItemAt indexItem: Int)
+    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView) -> UIView
+    func tableView(_ treeTableView: MMTreeTableView, didSelectRowAt indexPath: IndexPath)
 }
 
-public class MMTreeTableView: UIView {
+public class MMTreeTableView: UITableView {
 
+    weak open var treeDelegate: MMTreeTableViewDelegate?
     private let ID = "MMNodeCellIdentifier"
-    private var dataSource = [MMNode]()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private var datas = [MMNode]()
+
+    public override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
+        delegate = self
+        dataSource = self
+        register(MMNodeCell.self, forCellReuseIdentifier: ID)
         initialization()
-        addSubview(tableView, pinningEdges: .all, withInsets: .zero)
     }
 
     required init?(coder: NSCoder) { super.init(coder: coder); initialization() }
-
 
     private func initialization() {
 
     }
 
-    // MARK: Componets
+    // MARK: Components 
 
     private lazy var tableView: UITableView = {
         let result = UITableView(frame: .zero, style: .plain)
-        result.delegate = self
-        result.dataSource = self
-        result.register(MMNodeCell.self, forCellReuseIdentifier: ID)
+
         return result
     }()
 
@@ -44,13 +45,23 @@ public class MMTreeTableView: UIView {
 
 extension MMTreeTableView: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        return datas.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ID, for: indexPath) as! MMNodeCell
 
+        guard treeDelegate?.nodeView(numberOfItems: indexPath.row, nodeView: self) != nil else {
+            cell.customerView = MMNodeView()
+            (cell.customerView as! MMNodeView).title = "\(indexPath.row)"
+            return cell
+        }
+        cell.customerView = treeDelegate?.nodeView(numberOfItems: indexPath.row, nodeView: self)
         return cell
+    }
+
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
     }
 
 }

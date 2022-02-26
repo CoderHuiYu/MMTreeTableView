@@ -17,6 +17,7 @@
 		0C16B82327CA64C700C07A80 /* MMTreeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82227CA64C700C07A80 /* MMTreeTableView.swift */; };
 		0C16B82527CA64D500C07A80 /* MMNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82427CA64D500C07A80 /* MMNode.swift */; };
 		0C16B82727CA65C000C07A80 /* MMNodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82627CA65C000C07A80 /* MMNodeCell.swift */; };
+		0C16B82A27CA6D6B00C07A80 /* MMNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		0C16B82227CA64C700C07A80 /* MMTreeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMTreeTableView.swift; sourceTree = "<group>"; };
 		0C16B82427CA64D500C07A80 /* MMNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNode.swift; sourceTree = "<group>"; };
 		0C16B82627CA65C000C07A80 /* MMNodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNodeCell.swift; sourceTree = "<group>"; };
+		0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNodeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +81,21 @@
 		0C16B81F27CA645800C07A80 /* MMTreeTableView */ = {
 			isa = PBXGroup;
 			children = (
-				0C16B82027CA647500C07A80 /* UIView+Utilities.swift */,
+				0C16B82827CA6D4200C07A80 /* Helper */,
 				0C16B82227CA64C700C07A80 /* MMTreeTableView.swift */,
-				0C16B82427CA64D500C07A80 /* MMNode.swift */,
-				0C16B82627CA65C000C07A80 /* MMNodeCell.swift */,
 			);
 			path = MMTreeTableView;
+			sourceTree = "<group>";
+		};
+		0C16B82827CA6D4200C07A80 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				0C16B82027CA647500C07A80 /* UIView+Utilities.swift */,
+				0C16B82627CA65C000C07A80 /* MMNodeCell.swift */,
+				0C16B82427CA64D500C07A80 /* MMNode.swift */,
+				0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +175,7 @@
 				0C16B80E27CA644700C07A80 /* SceneDelegate.swift in Sources */,
 				0C16B82327CA64C700C07A80 /* MMTreeTableView.swift in Sources */,
 				0C16B82727CA65C000C07A80 /* MMNodeCell.swift in Sources */,
+				0C16B82A27CA6D6B00C07A80 /* MMNodeView.swift in Sources */,
 				0C16B82527CA64D500C07A80 /* MMNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
