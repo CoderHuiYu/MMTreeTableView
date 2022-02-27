@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol MMTreeTableViewDelegate: AnyObject{
+public protocol MMTreeTableViewDelegate: AnyObject {
 
     func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView) -> UIView
     func tableView(_ treeTableView: MMTreeTableView, didSelectRowAt indexPath: IndexPath)
@@ -17,12 +17,13 @@ public class MMTreeTableView: UITableView {
 
     weak open var treeDelegate: MMTreeTableViewDelegate?
     private let ID = "MMNodeCellIdentifier"
-    private var datas = [MMNode]()
+    private var datas = [Int]()
 
     public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         delegate = self
         dataSource = self
+        estimatedRowHeight = 44
         register(MMNodeCell.self, forCellReuseIdentifier: ID)
         initialization()
     }

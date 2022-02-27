@@ -15,7 +15,7 @@
 		0C16B81827CA644B00C07A80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C16B81627CA644B00C07A80 /* LaunchScreen.storyboard */; };
 		0C16B82127CA647500C07A80 /* UIView+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82027CA647500C07A80 /* UIView+Utilities.swift */; };
 		0C16B82327CA64C700C07A80 /* MMTreeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82227CA64C700C07A80 /* MMTreeTableView.swift */; };
-		0C16B82527CA64D500C07A80 /* MMNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82427CA64D500C07A80 /* MMNode.swift */; };
+		0C16B82527CA64D500C07A80 /* MMTreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82427CA64D500C07A80 /* MMTreeNode.swift */; };
 		0C16B82727CA65C000C07A80 /* MMNodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82627CA65C000C07A80 /* MMNodeCell.swift */; };
 		0C16B82A27CA6D6B00C07A80 /* MMNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */; };
 /* End PBXBuildFile section */
@@ -31,7 +31,7 @@
 		0C16B81927CA644B00C07A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0C16B82027CA647500C07A80 /* UIView+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Utilities.swift"; sourceTree = "<group>"; };
 		0C16B82227CA64C700C07A80 /* MMTreeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMTreeTableView.swift; sourceTree = "<group>"; };
-		0C16B82427CA64D500C07A80 /* MMNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNode.swift; sourceTree = "<group>"; };
+		0C16B82427CA64D500C07A80 /* MMTreeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMTreeNode.swift; sourceTree = "<group>"; };
 		0C16B82627CA65C000C07A80 /* MMNodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNodeCell.swift; sourceTree = "<group>"; };
 		0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMNodeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,7 +92,7 @@
 			children = (
 				0C16B82027CA647500C07A80 /* UIView+Utilities.swift */,
 				0C16B82627CA65C000C07A80 /* MMNodeCell.swift */,
-				0C16B82427CA64D500C07A80 /* MMNode.swift */,
+				0C16B82427CA64D500C07A80 /* MMTreeNode.swift */,
 				0C16B82927CA6D6B00C07A80 /* MMNodeView.swift */,
 			);
 			path = Helper;
@@ -176,7 +176,7 @@
 				0C16B82327CA64C700C07A80 /* MMTreeTableView.swift in Sources */,
 				0C16B82727CA65C000C07A80 /* MMNodeCell.swift in Sources */,
 				0C16B82A27CA6D6B00C07A80 /* MMNodeView.swift in Sources */,
-				0C16B82527CA64D500C07A80 /* MMNode.swift in Sources */,
+				0C16B82527CA64D500C07A80 /* MMTreeNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
