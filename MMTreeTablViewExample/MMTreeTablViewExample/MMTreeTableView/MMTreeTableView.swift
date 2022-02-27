@@ -16,6 +16,11 @@ public protocol MMTreeTableViewDelegate: AnyObject {
 public class MMTreeTableView: UITableView {
 
     weak open var treeDelegate: MMTreeTableViewDelegate?
+    var tree: MMFileTree<Any>? {
+        didSet {
+             reloadData()
+        }
+    }
     private let ID = "MMNodeCellIdentifier"
     private var datas = [Int]()
 
