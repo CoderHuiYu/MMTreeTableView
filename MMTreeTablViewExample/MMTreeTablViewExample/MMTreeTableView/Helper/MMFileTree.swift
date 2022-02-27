@@ -28,6 +28,10 @@ class MMFileTree<E> {
     public func update(_ node: MMNode<E>, form parentOld: MMNode<E>, to parentNew: MMNode<E>) {
 
     }
+
+    var childrenCount: Int {
+        return root.childs.count
+    }
 }
 
 public func += (lhs: MMNode<Any>, rhs: MMNode<Any>) { lhs.childs.append(rhs) }

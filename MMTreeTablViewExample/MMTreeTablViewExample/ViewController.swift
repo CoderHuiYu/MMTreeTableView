@@ -7,13 +7,25 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MMTreeTableViewDelegate {
+    typealias T = Model
+    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<Model>) -> UIView {
+        let result = UILabel()
+        result.text = "\(item)"
+        result.backgroundColor = .orange
+        return result
+    }
+
+    func tableView(_ treeTableView: MMTreeTableView<Model>, didSelectRowAt indexPath: IndexPath) {
+
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         constructionFileTree()
-        view.addSubview(treeView, pinningEdges: .all, withInsets: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        view.addSubview(treeView, pinningEdges: .all, withInsets: UIEdgeInsets(top: 100, left: 10, bottom: 10, right: 10))
     }
 
     private func constructionFileTree() {
@@ -32,12 +44,16 @@ class ViewController: UIViewController {
         let node2_3 = MMNode(element: Model(title: "加利福利亚"), parent: node2)
         node2.add([ node2_1, node2_2, node2_3 ])
 
+
+        root.add([ node1, node2 ])
+
         let fileTree = MMFileTree<Model>(root: root)
-        treeView.tree = fileTree as? MMFileTree<Any>
+        treeView.fileTree = fileTree
     }
 
-    private lazy var treeView: MMTreeTableView = {
-        let result = MMTreeTableView()
+    private lazy var treeView: MMTreeTableView<Model> = {
+        let result = MMTreeTableView<Model>()
+        result.treeDelegate = MMTreeDelegateThunk(base: self)
         result.backgroundColor = .red
         return result
     }()

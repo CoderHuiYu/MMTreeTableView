@@ -7,22 +7,42 @@
 
 import UIKit
 
-public protocol MMTreeTableViewDelegate: AnyObject {
-
-    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView) -> UIView
-    func tableView(_ treeTableView: MMTreeTableView, didSelectRowAt indexPath: IndexPath)
+protocol MMTreeTableViewDelegate {
+    associatedtype T
+    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<T>) -> UIView
+    func tableView(_ treeTableView: MMTreeTableView<T>, didSelectRowAt indexPath: IndexPath)
 }
 
-public class MMTreeTableView: UITableView {
+struct MMTreeDelegateThunk<E>: MMTreeTableViewDelegate {
 
-    weak open var treeDelegate: MMTreeTableViewDelegate?
-    var tree: MMFileTree<Any>? {
+    typealias T = E
+    private let _nodeViewCustomerView: (Int, MMTreeTableView<E>) -> UIView
+    private let _nodeViewDidSelectRowAt: (MMTreeTableView<E>, IndexPath) -> ()
+
+    init<Base: MMTreeTableViewDelegate>(base: Base) where Base.T == E {
+        _nodeViewCustomerView = base.nodeView(numberOfItems:nodeView:)
+        _nodeViewDidSelectRowAt = base.tableView(_:didSelectRowAt:)
+    }
+
+    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<E>) -> UIView {
+        return _nodeViewCustomerView(item, view)
+    }
+
+    func tableView(_ treeTableView: MMTreeTableView<E>, didSelectRowAt indexPath: IndexPath) {
+        _nodeViewDidSelectRowAt(treeTableView, indexPath)
+    }
+
+}
+
+public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDataSource { 
+
+    var treeDelegate: MMTreeDelegateThunk<E>?
+    var fileTree: MMFileTree<E>? {
         didSet {
-             reloadData()
+            reloadData()
         }
     }
     private let ID = "MMNodeCellIdentifier"
-    private var datas = [Int]()
 
     public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -39,19 +59,11 @@ public class MMTreeTableView: UITableView {
 
     }
 
-    // MARK: Components 
+    // MARK: Components
 
-    private lazy var tableView: UITableView = {
-        let result = UITableView(frame: .zero, style: .plain)
 
-        return result
-    }()
-
-}
-
-extension MMTreeTableView: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return datas.count
+        return fileTree?.childrenCount ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
