@@ -22,7 +22,7 @@ class MMNodeView: UIView {
     required init?(coder: NSCoder) { super.init(coder: coder); initialization() }
 
     private func initialization() {
-
+        addSubview(titleLabel, pinningEdges: .all, withInsets: .zero)
     }
 
     // MARK: Components

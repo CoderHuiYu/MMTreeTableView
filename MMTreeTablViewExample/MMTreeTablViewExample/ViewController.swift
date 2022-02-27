@@ -17,7 +17,7 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
     }
 
     func tableView(_ treeTableView: MMTreeTableView<Model>, didSelectRowAt indexPath: IndexPath) {
-
+        print("----\(indexPath.item)----")
     }
 
 
@@ -25,7 +25,7 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
         super.viewDidLoad()
 
         constructionFileTree()
-        view.addSubview(treeView, pinningEdges: .all, withInsets: UIEdgeInsets(top: 100, left: 10, bottom: 10, right: 10))
+        view.addSubview(treeView)
     }
 
     private func constructionFileTree() {
@@ -44,19 +44,30 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
         let node2_3 = MMNode(element: Model(title: "加利福利亚"), parent: node2)
         node2.add([ node2_1, node2_2, node2_3 ])
 
+        let node3 = MMNode(element: Model(title: "美国"), parent: root)
+        let node3_1 = MMNode(element: Model(title: "纽约"), parent: node3)
+        let node3_2 = MMNode(element: Model(title: "华盛顿"), parent: node3)
+        let node3_3 = MMNode(element: Model(title: "加利福利亚"), parent: node3)
+        node3.add([ node3_1, node3_2, node3_3 ])
 
-        root.add([ node1, node2 ])
+        root.add([ node1, node2, node3 ])
 
         let fileTree = MMFileTree<Model>(root: root)
         treeView.fileTree = fileTree
     }
 
     private lazy var treeView: MMTreeTableView<Model> = {
-        let result = MMTreeTableView<Model>()
+        let result = MMTreeTableView<Model>(frame: CGRect(x: 0, y: 100, width: 374, height: 500), style: .plain)
         result.treeDelegate = MMTreeDelegateThunk(base: self)
         result.backgroundColor = .red
         return result
     }()
+
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        treeView.reloadData()
+    }
+
 
 }
 

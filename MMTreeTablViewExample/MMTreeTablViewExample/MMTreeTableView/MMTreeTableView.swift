@@ -61,6 +61,7 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
 
     // MARK: Components
 
+    public func numberOfSections(in tableView: UITableView) -> Int { return 1 }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fileTree?.childrenCount ?? 0
@@ -68,7 +69,7 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ID, for: indexPath) as! MMNodeCell
-
+        cell.backgroundColor = .purple
         guard treeDelegate?.nodeView(numberOfItems: indexPath.row, nodeView: self) != nil else {
             cell.customerView = MMNodeView()
             (cell.customerView as! MMNodeView).title = "\(indexPath.row)"
@@ -79,7 +80,7 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        treeDelegate?.tableView(self, didSelectRowAt: indexPath)
     }
 
 }

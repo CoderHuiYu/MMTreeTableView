@@ -19,25 +19,11 @@ class MMNodeCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        initialize()
+        backgroundColor = .clear
+        selectionStyle = .none
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder); initialize()
-    }
-
-    private func initialize() {
-        backgroundColor = .white
-        translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            contentView.leftAnchor.constraint(equalTo: leftAnchor),
-            contentView.rightAnchor.constraint(equalTo: rightAnchor),
-            contentView.topAnchor.constraint(equalTo: topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: bottomAnchor).with(priority: .pseudoRequired),
-            contentView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
-        ])
-    }
+    required init?(coder: NSCoder) { super.init(coder: coder) }
 
     // MARK: Updating
     private func handleRowChanged(oldValue: UIView?) {
