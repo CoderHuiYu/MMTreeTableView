@@ -10,9 +10,9 @@ import UIKit
 class ViewController: UIViewController, MMTreeTableViewDelegate {
 
     typealias T = Model
-    func nodeView(numberOfItems item: Int, model: Model, nodeView view: MMTreeTableView<Model>) -> UIView {
-        let result = UILabel()
-        result.text = "\(item)"
+    func nodeView(numberOfItems item: Int, model element: Model, nodeView view: MMTreeTableView<Model>) -> UIView {
+        let result = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        result.text = "\(element.title)"
         result.backgroundColor = .orange
         return result
     }
@@ -45,10 +45,10 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
         let node2_3 = MMNode(element: Model(title: "加利福利亚"), parent: node2)
         node2.add([ node2_1, node2_2, node2_3 ])
 
-        let node3 = MMNode(element: Model(title: "美国"), parent: root)
-        let node3_1 = MMNode(element: Model(title: "纽约"), parent: node3)
-        let node3_2 = MMNode(element: Model(title: "华盛顿"), parent: node3)
-        let node3_3 = MMNode(element: Model(title: "加利福利亚"), parent: node3)
+        let node3 = MMNode(element: Model(title: "美国2"), parent: root)
+        let node3_1 = MMNode(element: Model(title: "纽约2"), parent: node3)
+        let node3_2 = MMNode(element: Model(title: "华盛顿2"), parent: node3)
+        let node3_3 = MMNode(element: Model(title: "加利福利亚2"), parent: node3)
         node3.add([ node3_1, node3_2, node3_3 ])
 
         root.add([ node1, node2, node3 ])

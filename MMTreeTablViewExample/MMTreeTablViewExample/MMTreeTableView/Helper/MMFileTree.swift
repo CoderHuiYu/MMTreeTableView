@@ -30,20 +30,20 @@ class MMFileTree<E> {
     }
 
     var childrenCount: Int {
-        return root.childs.count
+        return root.children.count
     }
 }
 
-public func += (lhs: MMNode<Any>, rhs: MMNode<Any>) { lhs.childs.append(rhs) }
-public func += (lhs: MMNode<Any>, rhs: [MMNode<Any>]) { lhs.childs += rhs }
+public func += (lhs: MMNode<Any>, rhs: MMNode<Any>) { lhs.children.append(rhs) }
+public func += (lhs: MMNode<Any>, rhs: [MMNode<Any>]) { lhs.children += rhs }
 
 public class MMNode<E> {
 
     var element: E
     var parent: MMNode<E>?
-    var childs = [MMNode<E>]()
+    var children = [MMNode<E>]()
     var isOpen: Bool
-    var numberOfChildren: Int { get { childs.count } }
+    var numberOfChildren: Int { get { children.count } }
 
     init(element: E, parent: MMNode<E>? = nil, isOpen: Bool = false) {
         self.element = element
@@ -52,16 +52,25 @@ public class MMNode<E> {
     }
 
     func add(_ node: MMNode<E>) {
-        childs += node
+        children += node
     }
 
     func add(_ nodes: [MMNode<E>]) {
-        childs += nodes
+        children += nodes
     }
 
     func child(at: Int) -> MMNode<E>? {
-        if childs.count <= at { return nil }
-        return childs[at]
+        if children.count <= at { return nil }
+        return children[at]
+    }
+
+    var depth: Int {
+        var result = 0
+        while parent != nil {
+            result += 1
+            parent = parent?.parent
+        }
+        return result
     }
 }
 
