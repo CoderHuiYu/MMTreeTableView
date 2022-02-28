@@ -8,8 +8,9 @@
 import UIKit
 
 class ViewController: UIViewController, MMTreeTableViewDelegate {
+
     typealias T = Model
-    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<Model>) -> UIView {
+    func nodeView(numberOfItems item: Int, model: Model, nodeView view: MMTreeTableView<Model>) -> UIView {
         let result = UILabel()
         result.text = "\(item)"
         result.backgroundColor = .orange
@@ -67,7 +68,6 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         treeView.reloadData()
     }
-
 
 }
 

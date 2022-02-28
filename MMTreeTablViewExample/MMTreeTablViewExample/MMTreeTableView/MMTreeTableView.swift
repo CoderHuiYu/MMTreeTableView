@@ -9,23 +9,23 @@ import UIKit
 
 protocol MMTreeTableViewDelegate {
     associatedtype T
-    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<T>) -> UIView
+    func nodeView(numberOfItems item: Int, model: T, nodeView view: MMTreeTableView<T>) -> UIView
     func tableView(_ treeTableView: MMTreeTableView<T>, didSelectRowAt indexPath: IndexPath)
 }
 
 struct MMTreeDelegateThunk<E>: MMTreeTableViewDelegate {
 
     typealias T = E
-    private let _nodeViewCustomerView: (Int, MMTreeTableView<E>) -> UIView
+    private let _nodeViewCustomerView: (Int, E ,MMTreeTableView<E>) -> UIView
     private let _nodeViewDidSelectRowAt: (MMTreeTableView<E>, IndexPath) -> ()
 
     init<Base: MMTreeTableViewDelegate>(base: Base) where Base.T == E {
-        _nodeViewCustomerView = base.nodeView(numberOfItems:nodeView:)
+        _nodeViewCustomerView = base.nodeView(numberOfItems:model:nodeView:)
         _nodeViewDidSelectRowAt = base.tableView(_:didSelectRowAt:)
     }
 
-    func nodeView(numberOfItems item: Int, nodeView view: MMTreeTableView<E>) -> UIView {
-        return _nodeViewCustomerView(item, view)
+    func nodeView(numberOfItems item: Int, model element: E, nodeView view: MMTreeTableView<E>) -> UIView {
+        return _nodeViewCustomerView(item, element, view)
     }
 
     func tableView(_ treeTableView: MMTreeTableView<E>, didSelectRowAt indexPath: IndexPath) {
@@ -42,6 +42,8 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
             reloadData()
         }
     }
+
+    private var nodes = [MMNode<E>]()
     private let ID = "MMNodeCellIdentifier"
 
     public override init(frame: CGRect, style: UITableView.Style) {
@@ -69,13 +71,13 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ID, for: indexPath) as! MMNodeCell
-        cell.backgroundColor = .purple
-        guard treeDelegate?.nodeView(numberOfItems: indexPath.row, nodeView: self) != nil else {
+        let model = nodes[indexPath.row] as! E
+        guard treeDelegate?.nodeView(numberOfItems: indexPath.row, model: model, nodeView: self) != nil else {
             cell.customerView = MMNodeView()
             (cell.customerView as! MMNodeView).title = "\(indexPath.row)"
             return cell
         }
-        cell.customerView = treeDelegate?.nodeView(numberOfItems: indexPath.row, nodeView: self)
+        cell.customerView = treeDelegate?.nodeView(numberOfItems: indexPath.row, model: model, nodeView: self)
         return cell
     }
 
