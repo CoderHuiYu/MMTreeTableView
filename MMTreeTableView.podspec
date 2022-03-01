@@ -7,6 +7,6 @@ Pod::Spec.new do |s|
   s.author       = { 'Jeffery Yu' => '171364980@qq.com' }
   s.platform     = :ios, '11.0'
   s.source       = { :git => 'https://github.com/CoderHuiYu/MMTreeTableView.git', :tag => s.version }
-  s.source_files  = 'MMTreeTableView'
+  s.source_files  = 'MMTreeTableView/*.swift'
   s.swift_versions = '5.0'
 end
