@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'MMTreeTableView'
-  s.version      = '1.0.0'
+  s.version      = '1.0.1'
   s.summary      = 'An excellent treeTableview'
   s.homepage     = 'https://github.com/CoderHuiYu/MMTreeTableView'
   s.license      = 'MIT'
