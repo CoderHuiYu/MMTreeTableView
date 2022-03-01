@@ -7,6 +7,11 @@
 
 import UIKit
 
+public enum Option {
+    case startDepth(Int)
+    case indentationWidth(CGFloat)
+}
+
 protocol MMTreeTableViewDelegate {
     associatedtype T
     func nodeView(numberOfItems item: Int, model element: T, nodeView view: MMTreeTableView<T>) -> UIView
@@ -37,7 +42,7 @@ struct MMTreeDelegateThunk<E>: MMTreeTableViewDelegate {
 public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDataSource { 
 
     var treeDelegate: MMTreeDelegateThunk<E>?
-    var fileTree: MMFileTree<E>? { didSet { reloadDataSource() } }
+    var fileTree: MMFileTree<E>? { didSet { reloadDataSource(); reloadData() } }
 
     private var nodes = [MMNode<E>]()
     private let ID = "MMNodeCellIdentifier"
@@ -58,18 +63,26 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
         register(MMNodeCell.self, forCellReuseIdentifier: ID)
     }
 
-
     private func reloadDataSource() {
         nodes.removeAll()
         nodes = preorder(fileTree?.root)
-        reloadData()
     }
 
     @discardableResult
-    private func preorder(_ root: MMNode<E>?, condition isOpen: Bool?=true) -> [MMNode<E>] {
+    private func preorder(_ root: MMNode<E>?) -> [MMNode<E>] {
         guard let root = root else { return nodes}
         nodes.append(root)
-        for child in root.children where child.isOpen == true || child.depth == 1 {
+        for child in root.children where child.depth == 1 || child.parent?.isOpen == true  {
+            preorder(child)
+        }
+        return nodes
+    }
+    
+    @discardableResult
+    private func preorder(_ root: MMNode<E>?, condition isContainRoot: Bool) -> [MMNode<E>] {
+        guard let root = root else { return nodes}
+        if isContainRoot { nodes.append(root) }
+        for child in root.children where child.parent?.isOpen == true  {
             preorder(child)
         }
         return nodes
@@ -79,18 +92,20 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
 
     public func numberOfSections(in tableView: UITableView) -> Int { return 1 }
 
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nodes.count
-    }
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return nodes.count }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ID, for: indexPath) as! MMNodeCell
         let node = nodes[indexPath.row]
+        cell.indentationLevel = node.depth
+        cell.indentationWidth = 20.0
+        
         guard treeDelegate?.nodeView(numberOfItems: indexPath.row, model: node.element, nodeView: self) != nil else {
             cell.customerView = MMNodeView()
             (cell.customerView as! MMNodeView).title = "\(indexPath.row)"
             return cell
         }
+       
         cell.customerView = treeDelegate?.nodeView(numberOfItems: indexPath.row, model: node.element, nodeView: self)
         return cell
     }
@@ -100,7 +115,40 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
         treeDelegate?.tableView(self, didSelectRowAt: indexPath)
         let node = nodes[indexPath.row]
         node.isOpen.toggle()
+        node.isOpen ? openNodes(didSelectNodeAt: node, didSelectRowAt: indexPath) : foldNodes(didSelectNodeAt: node, didSelectRowAt: indexPath)
+    }
+    
+    /// Helper method to insert the cell
+    private func openNodes(didSelectNodeAt node: MMNode<E>, didSelectRowAt indexPath: IndexPath) {
+        nodes.removeAll()
+        
+        var indexPaths = [IndexPath]()
+        let subNodes = preorder(node, condition: false)
+        for index in 0..<subNodes.count {
+            let indexPath = IndexPath(item: indexPath.row + index + 1, section: indexPath.section)
+            indexPaths.append(indexPath)
+        }
+        
         reloadDataSource()
+        insertRows(at: indexPaths, with: .none)
+    }
+    
+    /// Helper method to delete the cell
+    private func foldNodes(didSelectNodeAt node: MMNode<E>, didSelectRowAt indexPath: IndexPath) {
+        nodes.removeAll()
+        
+        node.isOpen = true
+        var indexPaths = [IndexPath]()
+        let subNodes = preorder(node, condition: false)
+        node.isOpen = false
+        
+        for index in 0..<subNodes.count {
+            let indexPath = IndexPath(item: indexPath.row + index + 1, section: indexPath.section)
+            indexPaths.append(indexPath)
+        }
+        
+        reloadDataSource()
+        deleteRows(at: indexPaths, with: .none)
     }
 
 }

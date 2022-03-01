@@ -53,10 +53,12 @@ public class MMNode<E> {
 
     func add(_ node: MMNode<E>) {
         children += node
+        node.parent = self
     }
 
     func add(_ nodes: [MMNode<E>]) {
         children += nodes
+        nodes.forEach { $0.parent = self }
     }
 
     func child(at: Int) -> MMNode<E>? {
@@ -65,12 +67,15 @@ public class MMNode<E> {
     }
 
     var depth: Int {
-        var result = 0
-        while parent != nil {
-            result += 1
-            parent = parent?.parent
+        get {
+            var result = 0
+            var myParent = parent
+            while myParent != nil {
+                result += 1
+                myParent = myParent?.parent
+            }
+            return result
         }
-        return result
     }
 }
 

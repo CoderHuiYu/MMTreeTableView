@@ -32,8 +32,7 @@ class MMNodeCell: UITableViewCell {
         // Add new
         if let view = customerView {
             view.removeFromSuperview()
-            contentView.addSubview(view, pinningEdges: .all, withInsets: .zero)
+            contentView.addSubview(view, pinningEdges: .all, withInsets: UIEdgeInsets(top: 0, left: CGFloat(indentationLevel) * indentationWidth, bottom: 0, right: 0))
         }
     }
-
 }
