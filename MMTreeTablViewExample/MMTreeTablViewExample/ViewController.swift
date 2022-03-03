@@ -21,7 +21,6 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
         print("----\(indexPath.item)----")
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,7 +30,7 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
 
     private func constructionFileTree() {
 
-        let root = MMNode(element: Model(title: "root"))
+        let root = MMNode(element: Model(title: "世界强国"))
 
         let node1 = MMNode(element: Model(title: "中国"))
         let node1_1 = MMNode(element: Model(title: "北京"))
@@ -67,12 +66,15 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
     }
 
     private lazy var treeView: MMTreeTableView<Model> = {
-        let result = MMTreeTableView<Model>(frame: .zero, style: .plain)
+        let expand = Option.expandForever(true)
+        let startDepth = Option.startDepth(1)
+        let indentation = Option.indentationWidth(30.0)
+        
+        let result = MMTreeTableView<Model>(options: [ startDepth, indentation ], frame: .zero, style: .plain)
         result.treeDelegate = MMTreeDelegateThunk(base: self)
         result.backgroundColor = .orange
         return result
     }()
-
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         treeView.reloadData()

@@ -8,6 +8,7 @@
 import UIKit
 
 public enum Option {
+    case expandForever(Bool)
     case startDepth(Int)
     case indentationWidth(CGFloat)
 }
@@ -21,6 +22,7 @@ protocol MMTreeTableViewDelegate {
 struct MMTreeDelegateThunk<E>: MMTreeTableViewDelegate {
 
     typealias T = E
+
     private let _nodeViewCustomerView: (Int, E ,MMTreeTableView<E>) -> UIView
     private let _nodeViewDidSelectRowAt: (MMTreeTableView<E>, IndexPath) -> ()
 
@@ -44,11 +46,17 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     var treeDelegate: MMTreeDelegateThunk<E>?
     var fileTree: MMFileTree<E>? { didSet { reloadDataSource(); reloadData() } }
 
+    private var options: [Option]?
     private var nodes = [MMNode<E>]()
     private let ID = "MMNodeCellIdentifier"
+    private var isexpandForever = false
+    private var startDepth = 0
+    private var indentationWidth = 20.0
+    private var fixedHeight: CGFloat?
 
-    public override init(frame: CGRect, style: UITableView.Style) {
+    required init(options: [Option]?=nil,frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
+        setOptions(options)
         initialization()
     }
 
@@ -59,34 +67,33 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     private func initialization() {
         delegate = self
         dataSource = self
-        estimatedRowHeight = 44
+        estimatedRowHeight = 44.0
         register(MMNodeCell.self, forCellReuseIdentifier: ID)
     }
 
     private func reloadDataSource() {
         nodes.removeAll()
-        nodes = preorder(fileTree?.root)
+        nodes = preorder(fileTree?.root, condition: true)
+        startDepth = -1
     }
 
     @discardableResult
-    private func preorder(_ root: MMNode<E>?) -> [MMNode<E>] {
-        guard let root = root else { return nodes}
-        nodes.append(root)
-        for child in root.children where child.depth == 1 || child.parent?.isOpen == true  {
-            preorder(child)
-        }
-        return nodes
-    }
-    
-    @discardableResult
-    private func preorder(_ root: MMNode<E>?, condition isContainRoot: Bool) -> [MMNode<E>] {
+    private func preorder(_ root: MMNode<E>?, condition isContainRoot: Bool = false) -> [MMNode<E>] {
         guard let root = root else { return nodes}
         if isContainRoot { nodes.append(root) }
-        for child in root.children where child.parent?.isOpen == true  {
-            preorder(child)
+
+        if isexpandForever {
+            for child in root.children {
+                preorder(child)
+            }
+        } else {
+            for child in root.children where child.depth == startDepth || child.parent?.isOpen == true  {
+                preorder(child, condition: true)
+            }
         }
         return nodes
     }
+
 
     // MARK: UITableViewDataSource
 
@@ -105,7 +112,7 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
             (cell.customerView as! MMNodeView).title = "\(indexPath.row)"
             return cell
         }
-       
+
         cell.customerView = treeDelegate?.nodeView(numberOfItems: indexPath.row, model: node.element, nodeView: self)
         return cell
     }
@@ -121,9 +128,11 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     /// Helper method to insert the cell
     private func openNodes(didSelectNodeAt node: MMNode<E>, didSelectRowAt indexPath: IndexPath) {
         nodes.removeAll()
-        
+        node.isOpen = true
+        node.parent?.isOpen = true
         var indexPaths = [IndexPath]()
         let subNodes = preorder(node, condition: false)
+
         for index in 0..<subNodes.count {
             let indexPath = IndexPath(item: indexPath.row + index + 1, section: indexPath.section)
             indexPaths.append(indexPath)
@@ -151,4 +160,17 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
         deleteRows(at: indexPaths, with: .none)
     }
 
+    private func setOptions(_ options: [Option]?) {
+        guard let options = options else { return }
+        for option in options {
+            switch option {
+            case let .expandForever(value):
+                isexpandForever = value
+            case let .startDepth(value):
+                startDepth = value
+            case let .indentationWidth(value):
+                indentationWidth = value
+            }
+        }
+    }
 }
