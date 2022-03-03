@@ -44,7 +44,13 @@ struct MMTreeDelegateThunk<E>: MMTreeTableViewDelegate {
 public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDataSource { 
 
     var treeDelegate: MMTreeDelegateThunk<E>?
-    var fileTree: MMFileTree<E>? { didSet { reloadDataSource(); reloadData() } }
+    var fileTree: MMFileTree<E>? {
+        didSet {
+            fileTree?.root.isOpen = true
+            reloadDataSource();
+            reloadData()
+        }
+    }
 
     private var options: [Option]?
     private var nodes = [MMNode<E>]()
@@ -84,11 +90,18 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
 
         if isexpandForever {
             for child in root.children {
-                preorder(child)
+                preorder(child, condition: true)
             }
         } else {
-            for child in root.children where child.depth == startDepth || child.parent?.isOpen == true  {
-                preorder(child, condition: true)
+            // has two judge, want to start with custom assigned depth
+            for child in root.children {
+                if child.depth < startDepth {
+                    child.isOpen = true
+                }
+
+                if child.parent?.isOpen == true {
+                    preorder(child, condition: true)
+                }
             }
         }
         return nodes
@@ -127,10 +140,12 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     
     /// Helper method to insert the cell
     private func openNodes(didSelectNodeAt node: MMNode<E>, didSelectRowAt indexPath: IndexPath) {
+        if isexpandForever { return }
         nodes.removeAll()
         node.isOpen = true
         node.parent?.isOpen = true
         var indexPaths = [IndexPath]()
+        // condition: false , because calculate the subNodes which need to expand do not need to contain the node
         let subNodes = preorder(node, condition: false)
 
         for index in 0..<subNodes.count {
@@ -144,6 +159,7 @@ public class MMTreeTableView<E>: UITableView, UITableViewDelegate, UITableViewDa
     
     /// Helper method to delete the cell
     private func foldNodes(didSelectNodeAt node: MMNode<E>, didSelectRowAt indexPath: IndexPath) {
+        if isexpandForever { return }
         nodes.removeAll()
         
         node.isOpen = true

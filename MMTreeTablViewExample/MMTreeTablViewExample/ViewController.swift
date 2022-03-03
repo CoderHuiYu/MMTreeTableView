@@ -69,7 +69,7 @@ class ViewController: UIViewController, MMTreeTableViewDelegate {
         let expand = Option.expandForever(true)
         let startDepth = Option.startDepth(1)
         let indentation = Option.indentationWidth(30.0)
-        
+
         let result = MMTreeTableView<Model>(options: [ startDepth, indentation ], frame: .zero, style: .plain)
         result.treeDelegate = MMTreeDelegateThunk(base: self)
         result.backgroundColor = .orange
