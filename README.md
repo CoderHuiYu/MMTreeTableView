@@ -11,8 +11,8 @@
 ## 二.Image and gif
 
 ## 三.怎么样使用 
-###3.1. 首先需要根据数据源来构建数据结构
-####举例：
+### 3.1. 首先需要根据数据源来构建数据结构
+#### 举例：
 ```swift
  private func constructionFileTree() {
 
@@ -51,7 +51,7 @@
         treeView.fileTree = fileTree
     }
 ```
-###3.2. 创建treeView，以及配置参数，这些参数都是可选的
+### 3.2. 创建treeView，以及配置参数，这些参数都是可选的
  * 这里的option是可以配置的，目前只有3项,如下
 
 ```swift
@@ -74,7 +74,7 @@ public enum Option {
     }()
 ```
 
-###3.3 让VC遵循代理
+### 3.3 让VC遵循代理
 为了让使用者可以配置每一个树的UI，所以使用泛型以及类型擦除，将数据抛出来，使用者只需要在`func nodeView(numberOfItems item: Int, model element: Model, nodeView view: MMTreeTableView<Model>) -> UIView` 这个代理方法里进行UI创建和配置即可。
 ```swift
 extension ViewController: MMTreeTableViewDelegate {
