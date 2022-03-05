@@ -58,7 +58,7 @@
 public enum Option {
     case expandForever(Bool) // 是否一直展开
     case startDepth(Int)     // 可以选择展开的树的深度，比如一进来就展开到树深度为2的位置
-    case indentationWidth(CGFloat) // 每一个层级的锁进宽度
+    case indentationWidth(CGFloat) // 每一个层级的缩进宽度
 }
 ```
 ```swift
