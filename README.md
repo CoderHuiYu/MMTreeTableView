@@ -92,3 +92,13 @@ extension ViewController: MMTreeTableViewDelegate {
     }
 }
 ```
+### 四. 集成
+* Installation with CocoaPods：`pod 'MMTreeTableView', '~> 1.1.0'`
+
+## Remind
+* ARC
+* iOS>=11.0
+
+## If you have any questions 
+#### If you have any questions, you can email to me:171364980@qq.com 
+
