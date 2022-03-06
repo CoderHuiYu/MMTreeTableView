@@ -1,6 +1,6 @@
 # MMTreeTableView
 ## 一个轻量级、 可配置、可以自定义每个层级的UI、简单易用的一个目录组件
-<img width="1014" alt="title_trr" src="https://user-images.githubusercontent.com/18704047/156887573-1c8bde3b-77df-43b3-975d-2e492da6cb47.png">
+<img width="300" alt="title_trr" src="https://user-images.githubusercontent.com/18704047/156887573-1c8bde3b-77df-43b3-975d-2e492da6cb47.png">
 
 
 ## 一.核心原理
