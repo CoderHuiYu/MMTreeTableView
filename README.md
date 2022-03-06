@@ -9,7 +9,9 @@
 3. 通过代理的方式来让使用方来自定义UI
 
 ## 二.Image and gif
-![demogif](https://user-images.githubusercontent.com/18704047/156888461-f194e366-431c-429b-a1d5-21651ae9aa88.gif)
+<p float="center">
+<img src="https://user-images.githubusercontent.com/18704047/156888461-f194e366-431c-429b-a1d5-21651ae9aa88.gif" width = "300">
+<p />
 
 
 ## 三.怎么样使用 
